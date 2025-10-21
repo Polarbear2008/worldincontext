@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ campaign.title }} - World in Context</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f8fafc;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f8fafc;">
+        <tr>
+            <td align="center" style="padding: 40px 20px;">
+                <table role="presentation" style="max-width: 600px; width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                    
+                    <!-- Header with Gradient -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #003d82 0%, #2d8b8b 100%); padding: 40px 30px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">
+                                World in Context
+                            </h1>
+                            <p style="margin: 10px 0 0 0; color: rgba(255, 255, 255, 0.9); font-size: 14px;">
+                                Dunyo Kontekstida
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Main Content -->
+                    <tr>
+                        <td style="padding: 50px 40px;">
+                            <!-- Campaign Title -->
+                            <h2 style="margin: 0 0 30px 0; color: #1e293b; font-size: 26px; font-weight: 700; text-align: center; line-height: 1.3;">
+                                {{ campaign.title }}
+                            </h2>
+                            
+                            <!-- Campaign Content -->
+                            <div style="color: #475569; font-size: 16px; line-height: 1.8;">
+                                {{ campaign.content }}
+                            </div>
+
+                            <!-- CTA Section (if needed) -->
+                            <div style="text-align: center; margin: 40px 0;">
+                                <a href="https://worldincontext.uz" style="display: inline-block; background: linear-gradient(135deg, #003d82 0%, #2d8b8b 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 8px 24px rgba(0, 61, 130, 0.3);">
+                                    Bosh Sahifaga O'tish
+                                </a>
+                            </div>
+
+                            <!-- Divider -->
+                            <div style="margin: 40px 0; height: 1px; background: linear-gradient(90deg, transparent, #e2e8f0, transparent);"></div>
+
+                            <!-- Featured Articles (Optional) -->
+                            <div style="margin-top: 40px;">
+                                <h3 style="margin: 0 0 20px 0; color: #1e293b; font-size: 20px; font-weight: 600; text-align: center;">
+                                    So'nggi Maqolalar
+                                </h3>
+                                
+                                <!-- Article 1 -->
+                                <div style="margin-bottom: 20px; padding: 20px; background-color: #f8fafc; border-radius: 8px; border-left: 4px solid #003d82;">
+                                    <h4 style="margin: 0 0 10px 0; color: #1e293b; font-size: 16px; font-weight: 600;">
+                                        <a href="{{ article1.url }}" style="color: #003d82; text-decoration: none;">
+                                            {{ article1.title }}
+                                        </a>
+                                    </h4>
+                                    <p style="margin: 0; color: #64748b; font-size: 14px; line-height: 1.6;">
+                                        {{ article1.excerpt }}
+                                    </p>
+                                </div>
+
+                                <!-- Article 2 -->
+                                <div style="margin-bottom: 20px; padding: 20px; background-color: #f8fafc; border-radius: 8px; border-left: 4px solid #2d8b8b;">
+                                    <h4 style="margin: 0 0 10px 0; color: #1e293b; font-size: 16px; font-weight: 600;">
+                                        <a href="{{ article2.url }}" style="color: #2d8b8b; text-decoration: none;">
+                                            {{ article2.title }}
+                                        </a>
+                                    </h4>
+                                    <p style="margin: 0; color: #64748b; font-size: 14px; line-height: 1.6;">
+                                        {{ article2.excerpt }}
+                                    </p>
+                                </div>
+
+                                <!-- Article 3 -->
+                                <div style="margin-bottom: 20px; padding: 20px; background-color: #f8fafc; border-radius: 8px; border-left: 4px solid #003d82;">
+                                    <h4 style="margin: 0 0 10px 0; color: #1e293b; font-size: 16px; font-weight: 600;">
+                                        <a href="{{ article3.url }}" style="color: #003d82; text-decoration: none;">
+                                            {{ article3.title }}
+                                        </a>
+                                    </h4>
+                                    <p style="margin: 0; color: #64748b; font-size: 14px; line-height: 1.6;">
+                                        {{ article3.excerpt }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Social Links -->
+                            <div style="margin-top: 40px; text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(0, 61, 130, 0.05) 0%, rgba(45, 139, 139, 0.05) 100%); border-radius: 8px;">
+                                <p style="margin: 0 0 15px 0; color: #475569; font-size: 14px; font-weight: 600;">
+                                    Bizni Ijtimoiy Tarmoqlarda Kuzatib Boring
+                                </p>
+                                <div>
+                                    <a href="https://t.me/WorldInContext" style="display: inline-block; margin: 0 10px; color: #003d82; text-decoration: none; font-size: 14px;">
+                                        Telegram
+                                    </a>
+                                    <span style="color: #cbd5e1;">|</span>
+                                    <a href="https://worldincontext.uz" style="display: inline-block; margin: 0 10px; color: #003d82; text-decoration: none; font-size: 14px;">
+                                        Website
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f8fafc; padding: 30px 40px; text-align: center; border-top: 1px solid #e2e8f0;">
+                            <p style="margin: 0 0 15px 0; color: #64748b; font-size: 14px;">
+                                Bu email World in Context xabarnomangiz tufayli yuborildi
+                            </p>
+                            <p style="margin: 0 0 15px 0; color: #94a3b8; font-size: 13px;">
+                                Toshkent, O'zbekiston
+                            </p>
+                            <div style="margin-top: 20px;">
+                                <a href="https://worldincontext.uz" style="color: #003d82; text-decoration: none; font-size: 13px; margin: 0 10px;">Bosh sahifa</a>
+                                <span style="color: #cbd5e1;">|</span>
+                                <a href="https://worldincontext.uz/about" style="color: #003d82; text-decoration: none; font-size: 13px; margin: 0 10px;">Biz haqimizda</a>
+                                <span style="color: #cbd5e1;">|</span>
+                                <a href="{{ unsubscribe_url }}" style="color: #003d82; text-decoration: none; font-size: 13px; margin: 0 10px;">Obunani bekor qilish</a>
+                            </div>
+                            <p style="margin: 20px 0 0 0; color: #94a3b8; font-size: 12px;">
+                                © 2024 World in Context. Barcha huquqlar himoyalangan.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
