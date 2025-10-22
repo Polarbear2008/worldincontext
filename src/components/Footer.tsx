@@ -98,7 +98,14 @@ const Footer = () => {
               © {currentYear} World in Context. Barcha huquqlar himoyalangan.
             </p>
             <p className="text-primary-foreground/60 text-sm mt-2 md:mt-0">
-              Numonov Samandar tomonidan yaratilgan
+              <a 
+                href="https://t.me/samandar_vibe" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-primary-foreground transition-colors"
+              >
+                Numonov Samandar
+              </a> tomonidan yaratilgan
             </p>
           </div>
         </div>
