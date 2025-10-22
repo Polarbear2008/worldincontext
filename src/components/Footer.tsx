@@ -13,15 +13,9 @@ const Footer = () => {
     ],
     about: [
       { name: "Biz Haqimizda", href: "/about" },
-      { name: "Jamoamiz", href: "/team" },
-      { name: "Tarjima Jarayoni", href: "/process" },
-      { name: "Aloqa", href: "/contact" },
+      { name: "Jamoamiz", href: "/about" },
+      { name: "Aloqa", href: "/about" },
     ],
-    legal: [
-      { name: "Maxfiylik Siyosati", href: "/privacy" },
-      { name: "Xizmat Ko'rsatish Shartlari", href: "/terms" },
-      { name: "Cookie Siyosati", href: "/cookies" },
-    ]
   };
 
   const socialLinks = [
@@ -34,7 +28,7 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
@@ -84,23 +78,6 @@ const Footer = () => {
             <h3 className="font-semibold text-primary-foreground mb-4">Haqida</h3>
             <ul className="space-y-2">
               {footerLinks.about.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-primary-foreground/80 hover:text-primary-foreground transition-colors text-sm"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h3 className="font-semibold text-primary-foreground mb-4">Qonuniy</h3>
-            <ul className="space-y-2">
-              {footerLinks.legal.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}

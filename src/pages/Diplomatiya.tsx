@@ -104,9 +104,6 @@ const Diplomatiya = () => {
                         <CardTitle className="text-lg leading-tight group-hover:text-primary transition-colors duration-300">
                           {article.title}
                         </CardTitle>
-                        <CardDescription className="text-sm text-muted-foreground">
-                          {article.excerpt?.substring(0, 100)}...
-                        </CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">

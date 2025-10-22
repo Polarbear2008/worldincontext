@@ -50,8 +50,12 @@ const Admin = () => {
     title: "",
     content: "",
     category: "Siyosat",
-    excerpt: ""
+    excerpt: "",
+    translator: ""
   });
+
+  const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const [selectedFilesForPublishing, setSelectedFilesForPublishing] = useState<number[]>([]);
 
@@ -150,6 +154,13 @@ const Admin = () => {
     }
   }, [isAuthenticated, loadDashboardData]);
 
+  // Clear uploaded files when switching to upload tab
+  useEffect(() => {
+    if (activeTab === 'upload') {
+      setUploadedFiles([]);
+    }
+  }, [activeTab]);
+
   const handleLogin = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (loginData.username === "admin" && loginData.password === "IbrohimSamandar") {
@@ -197,6 +208,7 @@ const Admin = () => {
         excerpt: newArticle.excerpt || newArticle.content.substring(0, 200) + "...",
         category: newArticle.category,
         author: "Admin", // In a real app, this would come from authenticated user
+        translator: newArticle.translator || undefined,
         status: "published" as const,
         article_type: "text" as const
       };
@@ -207,7 +219,8 @@ const Admin = () => {
         title: "",
         content: "",
         category: "Siyosat",
-        excerpt: ""
+        excerpt: "",
+        translator: ""
       });
 
       toast.success("Maqola muvaffaqiyatli yaratildi!");
@@ -231,6 +244,70 @@ const Admin = () => {
       toast.error('Maqolani o\'chirishda xatolik yuz berdi');
     }
   }, [loadDashboardData]);
+
+  const handleEditArticle = useCallback((article: Article) => {
+    setEditingArticle(article);
+    setIsEditMode(true);
+    setNewArticle({
+      title: article.title,
+      content: article.content,
+      category: article.category,
+      excerpt: article.excerpt,
+      translator: article.translator || ""
+    });
+    setActiveTab('create');
+  }, []);
+
+  const handleUpdateArticle = useCallback(async () => {
+    if (!editingArticle || !newArticle.title || !newArticle.content) {
+      toast.error("Sarlavha va mazmunni kiriting");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const articleData = {
+        title: newArticle.title,
+        content: newArticle.content,
+        excerpt: newArticle.excerpt || newArticle.content.substring(0, 200) + "...",
+        category: newArticle.category,
+        translator: newArticle.translator || undefined,
+      };
+
+      await articlesService.updateArticle(editingArticle.id, articleData);
+
+      setNewArticle({
+        title: "",
+        content: "",
+        category: "Siyosat",
+        excerpt: "",
+        translator: ""
+      });
+      setEditingArticle(null);
+      setIsEditMode(false);
+
+      toast.success("Maqola muvaffaqiyatli yangilandi!");
+      loadDashboardData();
+    } catch (error: any) {
+      console.error('Error updating article:', error);
+      const errorMessage = error?.message || 'Maqola yangilashda xatolik yuz berdi';
+      toast.error(`Xatolik: ${errorMessage}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [editingArticle, newArticle, loadDashboardData]);
+
+  const handleCancelEdit = useCallback(() => {
+    setEditingArticle(null);
+    setIsEditMode(false);
+    setNewArticle({
+      title: "",
+      content: "",
+      category: "Siyosat",
+      excerpt: "",
+      translator: ""
+    });
+  }, []);
 
   const handleFileUploadForArticle = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -283,6 +360,7 @@ const Admin = () => {
         excerpt: newArticle.excerpt || `PDF fayl - ${uploadedFiles[0].original_name}`,
         category: newArticle.category,
         author: "Admin",
+        translator: newArticle.translator || undefined,
         status: "published" as const,
         article_type: "file" as const,
         file_id: fileId
@@ -295,7 +373,8 @@ const Admin = () => {
         title: "",
         content: "",
         category: "Siyosat",
-        excerpt: ""
+        excerpt: "",
+        translator: ""
       });
       setUploadedFiles([]);
 
@@ -499,7 +578,11 @@ const Admin = () => {
                             <Eye className="h-4 w-4" />
                           </a>
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleEditArticle(article)}
+                        >
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button
@@ -774,6 +857,16 @@ const Admin = () => {
                 />
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="file-translator">Tarjimon (ixtiyoriy)</Label>
+                <Input
+                  id="file-translator"
+                  placeholder="Tarjimon ismini kiriting"
+                  value={newArticle.translator}
+                  onChange={(e) => setNewArticle({...newArticle, translator: e.target.value})}
+                />
+              </div>
+
               <div className="space-y-4">
                 <Label>PDF Fayl Yuklash</Label>
                 <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
@@ -828,10 +921,20 @@ const Admin = () => {
         <TabsContent value="create" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Yangi Maqola Yaratish</CardTitle>
-              <CardDescription>
-                Yangi maqola yozing va nashr qiling
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>{isEditMode ? 'Maqolani Tahrirlash' : 'Yangi Maqola Yaratish'}</CardTitle>
+                  <CardDescription>
+                    {isEditMode ? 'Maqolani tahrir qiling va saqlang' : 'Yangi maqola yozing va nashr qiling'}
+                  </CardDescription>
+                </div>
+                {isEditMode && (
+                  <Button variant="outline" onClick={handleCancelEdit}>
+                    <X className="h-4 w-4 mr-2" />
+                    Bekor qilish
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -872,6 +975,16 @@ const Admin = () => {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="translator">Tarjimon (ixtiyoriy)</Label>
+                <Input
+                  id="translator"
+                  placeholder="Tarjimon ismini kiriting"
+                  value={newArticle.translator}
+                  onChange={(e) => setNewArticle({...newArticle, translator: e.target.value})}
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="content">Maqola mazmuni</Label>
                 <Textarea
                   id="content"
@@ -883,7 +996,7 @@ const Admin = () => {
               </div>
 
               <Button
-                onClick={handleCreateArticle}
+                onClick={isEditMode ? handleUpdateArticle : handleCreateArticle}
                 disabled={loading}
                 className="flex items-center gap-2"
               >
@@ -892,7 +1005,7 @@ const Admin = () => {
                 ) : (
                   <Save className="h-4 w-4" />
                 )}
-                Maqolani Saqlash
+                {isEditMode ? 'Maqolani Yangilash' : 'Maqolani Saqlash'}
               </Button>
             </CardContent>
           </Card>

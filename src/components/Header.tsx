@@ -1,15 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Menu, X } from "lucide-react";
+import { Search, Menu, X, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { authService } from "@/lib/auth";
 import logo from "@/assets/logo.png";
 
 const Header = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Check authentication status on mount
+    const checkAuth = async () => {
+      const user = await authService.getCurrentUser();
+      setIsAuthenticated(!!user);
+      if (user) {
+        setUserName(user.user_metadata?.full_name || user.email?.split('@')[0] || 'User');
+      }
+    };
+
+    checkAuth();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = authService.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session);
+      if (session?.user) {
+        setUserName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User');
+      } else {
+        setUserName(null);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +49,19 @@ const Header = () => {
       setIsMenuOpen(false);
     } else {
       toast.error("Iltimos, qidiruv so'zini kiriting");
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await authService.signOut();
+      setIsAuthenticated(false);
+      setUserName(null);
+      toast.success("Tizimdan muvaffaqiyatli chiqdingiz");
+      navigate('/');
+      setIsMenuOpen(false);
+    } catch (error) {
+      toast.error("Chiqishda xatolik yuz berdi");
     }
   };
 
@@ -66,12 +109,32 @@ const Header = () => {
                 className="pl-9 pr-3 w-48 h-9 text-sm glass-effect hover:border-primary/50 focus:border-primary transition-colors"
               />
             </form>
-            <Button variant="outline" size="sm" className="hover-scale whitespace-nowrap" asChild>
-              <a href="/signin">Kirish</a>
-            </Button>
-            <Button size="sm" className="hover-scale bg-primary whitespace-nowrap" asChild>
-              <a href="/signup">Ro'yxatdan o'tish</a>
-            </Button>
+            {isAuthenticated ? (
+              <>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-lg">
+                  <User className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium text-primary">{userName}</span>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="hover-scale whitespace-nowrap"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Chiqish
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" size="sm" className="hover-scale whitespace-nowrap" asChild>
+                  <a href="/signin">Kirish</a>
+                </Button>
+                <Button size="sm" className="hover-scale bg-primary whitespace-nowrap" asChild>
+                  <a href="/signup">Ro'yxatdan o'tish</a>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -113,12 +176,32 @@ const Header = () => {
                 ))}
               </nav>
               <div className="flex flex-col gap-3 pt-4 border-t border-border">
-                <Button variant="outline" size="lg" className="w-full h-12 text-base" asChild>
-                  <a href="/signin">Kirish</a>
-                </Button>
-                <Button size="lg" className="w-full h-12 text-base bg-primary" asChild>
-                  <a href="/signup">Ro'yxatdan o'tish</a>
-                </Button>
+                {isAuthenticated ? (
+                  <>
+                    <div className="flex items-center gap-3 px-4 py-3 bg-primary/10 rounded-lg">
+                      <User className="h-5 w-5 text-primary" />
+                      <span className="text-base font-medium text-primary">{userName}</span>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="lg" 
+                      className="w-full h-12 text-base"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="h-5 w-5 mr-2" />
+                      Chiqish
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="outline" size="lg" className="w-full h-12 text-base" asChild>
+                      <a href="/signin">Kirish</a>
+                    </Button>
+                    <Button size="lg" className="w-full h-12 text-base bg-primary" asChild>
+                      <a href="/signup">Ro'yxatdan o'tish</a>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>

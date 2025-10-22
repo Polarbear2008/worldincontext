@@ -90,7 +90,7 @@ const About = () => {
                 World in Context Haqida
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground mb-8">
-                Biz dunyoning eng yaxshi ta'lim mazmunini o'zbek tiliga tarjima qilamiz, shunda global bilim ochiq bo'ladi.
+                Biz dunyoning eng yaxshi ta'lim maqolalarini o'zbek tiliga tarjima qilamiz, shunda global bilim ochiq bo'ladi.
               </p>
             </div>
           </div>

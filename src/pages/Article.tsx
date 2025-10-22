@@ -193,21 +193,6 @@ const Article = () => {
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <Button onClick={handlePDFDownload} className="flex items-center gap-2">
-                <Download className="h-4 w-4" />
-                PDF Yuklash
-              </Button>
-              <Button variant="outline" onClick={handlePrint} className="flex items-center gap-2">
-                <Printer className="h-4 w-4" />
-                Chop Etish
-              </Button>
-              <Button variant="outline" onClick={handleShare} className="flex items-center gap-2">
-                <Share2 className="h-4 w-4" />
-                Ulashish
-              </Button>
-            </div>
           </div>
         </div>
       </section>
@@ -311,16 +296,6 @@ const Article = () => {
                     {article.updated_at && (
                       <span>Yangilangan: {new Date(article.updated_at).toLocaleDateString('uz-UZ')}</span>
                     )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={handleShare}>
-                      <Share2 className="h-4 w-4 mr-1" />
-                      Ulashish
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={handlePrint}>
-                      <Printer className="h-4 w-4 mr-1" />
-                      Chop Etish
-                    </Button>
                   </div>
                 </div>
               </CardContent>

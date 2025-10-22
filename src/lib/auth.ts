@@ -22,34 +22,55 @@ export const authService = {
         options: {
           data: {
             full_name: data.fullName,
-          }
+          },
+          emailRedirectTo: window.location.origin
         }
       })
 
-      if (authError) throw authError
+      if (authError) {
+        console.error('Auth signup error:', authError)
+        throw authError
+      }
+
+      if (!authData.user) {
+        throw new Error('Foydalanuvchi yaratilmadi')
+      }
 
       // Insert user data into users table
-      if (authData.user) {
-        const { error: dbError } = await supabase
-          .from('users')
-          .insert([
-            {
-              id: authData.user.id,
-              email: data.email,
-              full_name: data.fullName,
-              role: 'reader'
-            }
-          ])
+      // Use upsert to handle cases where user might already exist
+      const { error: dbError } = await supabase
+        .from('users')
+        .upsert([
+          {
+            id: authData.user.id,
+            email: data.email,
+            full_name: data.fullName,
+            role: 'reader'
+          }
+        ], {
+          onConflict: 'id'
+        })
 
-        if (dbError) {
-          console.error('Error inserting user data:', dbError)
-          // Don't throw here, auth user is already created
-        }
+      if (dbError) {
+        console.error('Error inserting user data into users table:', dbError)
+        console.error('Error details:', JSON.stringify(dbError, null, 2))
+        // Log but don't throw - auth user is already created
+        // The user can still sign in even if the users table insert fails
       }
 
       return { user: authData.user, session: authData.session }
     } catch (error: any) {
       console.error('Sign up error:', error)
+      
+      // Provide more specific error messages
+      if (error.message?.includes('already registered')) {
+        throw new Error('Bu email allaqachon ro\'yxatdan o\'tgan')
+      } else if (error.message?.includes('Invalid email')) {
+        throw new Error('Noto\'g\'ri email formati')
+      } else if (error.message?.includes('Password')) {
+        throw new Error('Parol juda qisqa (kamida 6 ta belgi)')
+      }
+      
       throw new Error(error.message || 'Ro\'yxatdan o\'tishda xatolik yuz berdi')
     }
   },

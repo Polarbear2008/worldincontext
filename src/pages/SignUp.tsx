@@ -50,13 +50,11 @@ const SignUp = () => {
         fullName: formData.name
       });
 
-      toast.success("Muvaffaqiyatli ro'yxatdan o'tdingiz! Emailingizni tasdiqlang.");
+      toast.success("Muvaffaqiyatli ro'yxatdan o'tdingiz!");
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       
-      // Redirect to sign in after 2 seconds
-      setTimeout(() => {
-        navigate("/signin");
-      }, 2000);
+      // Redirect to home page
+      navigate("/");
     } catch (error: any) {
       toast.error(error.message || "Ro'yxatdan o'tishda xatolik yuz berdi");
     } finally {

@@ -111,16 +111,11 @@ const LatestArticles = () => {
                 <CardTitle className="text-lg leading-tight group-hover:text-primary transition-colors duration-300">
                   {article.title}
                 </CardTitle>
-                {article.excerpt && (
-                  <CardDescription className="text-sm text-muted-foreground">
-                    {article.excerpt}
-                  </CardDescription>
-                )}
               </CardHeader>
               <CardContent className="space-y-4 relative z-10">
-                {article.content && (
+                {article.excerpt && (
                   <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
-                    {article.content.substring(0, 150)}...
+                    {article.excerpt}
                   </p>
                 )}
                 <div className="flex items-center justify-between pt-2 border-t border-border/30">
